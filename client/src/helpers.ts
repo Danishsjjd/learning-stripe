@@ -1,4 +1,4 @@
-const baseUrl = "http://localhost:3000/"
+const baseUrl = "http://localhost:3333/"
 
 export default async function fetchFromAPI({
   uri,

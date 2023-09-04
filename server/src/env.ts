@@ -9,6 +9,7 @@ export const env = createEnv({
     WEBAPP_URL: z.string().url(),
     STRIPE_SECRET: z.string(),
     PORT: z.string(),
+    STRIPE_WEBHOOK_SECRETS: z.string(),
   },
   runtimeEnv: process.env,
 })
