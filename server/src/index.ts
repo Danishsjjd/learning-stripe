@@ -8,5 +8,5 @@ export const stripe = new Stripe(env.STRIPE_SECRET, {
 })
 
 app.listen(env.PORT, () => {
-  console.log(`server is running at: ${env.PORT} 🚀`)
+  console.info(`server is running at: ${env.PORT} 🚀`)
 })

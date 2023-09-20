@@ -7,7 +7,7 @@ const webhookHandler: Partial<
   Record<Stripe.Event.Type, (event: any) => Promise<unknown>>
 > = {
   "payment_intent.created": async (obj: Stripe.PaymentIntent) => {
-    console.log(obj.amount)
+    console.info("payment intent amount:", obj.amount)
   },
 }
 

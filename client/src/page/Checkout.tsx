@@ -25,8 +25,8 @@ const Checkout = () => {
           {
             quantity,
             price_data: {
-              unit_amount: 300,
-              currency: "pkr",
+              unit_amount: 500, // $5
+              currency: "usd",
               product_data: {
                 name: "dish",
                 description: "awesome dish!",

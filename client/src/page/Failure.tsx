@@ -1,5 +1,10 @@
+import { useSearchParams } from "react-router-dom"
+
 const Failure = () => {
-  return <div>Failure</div>
+  const [searchParams] = useSearchParams()
+  const sessionId = searchParams.get("session_id")
+
+  return <div>Failure session id: {sessionId}</div>
 }
 
 export default Failure

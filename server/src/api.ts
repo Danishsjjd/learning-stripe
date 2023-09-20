@@ -8,11 +8,15 @@ const app = express()
 
 app.use(
   express.json({
-    verify: (req, _, buf) => (req["rawBody"] = buf),
+    verify: (req, _, buf) => {
+      // TODO: check (chat-gpt will check chat)
+      return (req["rawBody"] = buf)
+    },
   })
 )
 app.use(cors())
 
+// Always decide how much to charge on the server side, a trusted environment, as opposed to the client. This prevents malicious customers from being able to choose their own prices.
 // TODO: catch-error
 app.post("/checkout", async ({ body }, res) =>
   res.send(await createStripeCheckoutSession(body.line_items))

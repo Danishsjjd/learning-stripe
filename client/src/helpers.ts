@@ -8,7 +8,7 @@ export default async function fetchFromAPI({
   ...props
 }: Omit<RequestInit, "body"> & {
   uri: string
-  body: Record<string, any>
+  body?: Record<string, any>
 }) {
   return fetch(baseUrl + uri, {
     method,
