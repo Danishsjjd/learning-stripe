@@ -5,6 +5,7 @@ import Checkout from "../page/Checkout"
 import Success from "../page/Success"
 import Failure from "../page/Failure"
 import Payment from "../page/Payment"
+import Customers from "../page/Customers"
 
 const AppRouter = () => {
   return (
@@ -16,6 +17,7 @@ const AppRouter = () => {
           <Route element={<Success />} path="/success" />
           <Route element={<Failure />} path="/failed" />
           <Route element={<Payment />} path="/payment" />
+          <Route element={<Customers />} path="/customers" />
         </Routes>
       </Header>
     </BrowserRouter>

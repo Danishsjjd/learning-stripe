@@ -22,7 +22,7 @@ interface Props {
 }
 
 const drawerWidth = 240
-const navItems = ["checkout", "payment"]
+const navItems = ["checkout", "payment", "customers"]
 
 export default function Header({ children }: Props) {
   const navigate = useNavigate()

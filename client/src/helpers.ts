@@ -10,7 +10,7 @@ export default async function fetchFromAPI({
   ...props
 }: Omit<RequestInit, "body"> & {
   uri: string
-  body?: Record<string, any>
+  body?: Record<string, unknown>
 }) {
   const user = auth.currentUser
   const token = await user?.getIdToken()

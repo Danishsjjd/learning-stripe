@@ -33,7 +33,7 @@ app.post("/wallet", async (req, res) => {
   return res.send(await createSetupIntent({ userId: user.uid }))
 })
 
-app.post("/get", async (req, res) => {
+app.get("/wallet", async (req, res) => {
   const user = validateUser(req)
 
   return res.send((await listPaymentMethods({ userId: user.uid })).data)
@@ -43,7 +43,6 @@ app.post("/hooks", handleStripeWebhooks)
 
 async function decodeJWT(req: Request, _: Response, next: NextFunction) {
   const authToken = req.headers["authorization"]
-  console.log("authToken", authToken)
   try {
     if (authToken && authToken.startsWith("Bearer ")) {
       const token = authToken.split("Bearer ")[1]
