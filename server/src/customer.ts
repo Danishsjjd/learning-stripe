@@ -34,3 +34,17 @@ export async function upsertCustomer(
     return customer
   }
 }
+
+export async function createSetupIntent({ userId }: { userId: string }) {
+  const customer = await upsertCustomer(userId)
+
+  return stripe.setupIntents.create({
+    customer: customer.id,
+  })
+}
+
+export const listPaymentMethods = async ({ userId }: { userId: string }) => {
+  const customer = await upsertCustomer(userId)
+
+  return stripe.paymentMethods.list({ customer: customer.id, type: "card" })
+}

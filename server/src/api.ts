@@ -4,6 +4,7 @@ import createStripeCheckoutSession from "./checkout"
 import createStripePaymentIntent from "./payments"
 import handleStripeWebhooks from "./webhooks"
 import { getAuth } from "firebase-admin/auth"
+import { createSetupIntent, listPaymentMethods } from "./customer"
 
 const app = express()
 
@@ -25,6 +26,18 @@ app.post("/checkout", async (req: Request, res) => {
 app.post("/payments", async ({ body }, res) =>
   res.send(await createStripePaymentIntent(body))
 )
+
+app.post("/wallet", async (req, res) => {
+  const user = validateUser(req)
+
+  return res.send(await createSetupIntent({ userId: user.uid }))
+})
+
+app.post("/get", async (req, res) => {
+  const user = validateUser(req)
+
+  return res.send((await listPaymentMethods({ userId: user.uid })).data)
+})
 
 app.post("/hooks", handleStripeWebhooks)
 
