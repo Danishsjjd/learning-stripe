@@ -27,7 +27,6 @@ const Payment = () => {
   }
 
   const handleSubmit = async (e: FormEvent) => {
-    // TODO: handle error
     e.preventDefault()
     const cardElement = elements?.getElement(CardElement)
     const cardPayment = await stripe?.confirmCardPayment(

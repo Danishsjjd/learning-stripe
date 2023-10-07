@@ -1,3 +1,7 @@
+/**
+ * This is a demo app that can be referred to as a Stripe/Firebase starter, or you can use it for future reference. 😉
+ */
+
 import "express-async-errors"
 import { app } from "./api"
 import { env } from "./env"

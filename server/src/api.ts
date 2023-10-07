@@ -18,13 +18,10 @@ app.use(cors())
 
 app.use(decodeJWT)
 
-// Always decide how much to charge on the server side, a trusted environment, as opposed to the client. This prevents malicious customers from being able to choose their own prices.
-// TODO: catch-error
 app.post("/checkout", async (req: Request, res) => {
   res.send(await createStripeCheckoutSession(req.body.line_items))
 })
 
-// TODO: catch-error
 app.post("/payments", async ({ body }, res) =>
   res.send(await createStripePaymentIntent(body))
 )

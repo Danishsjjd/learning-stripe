@@ -20,7 +20,6 @@ export default async function handleStripeWebhooks(
   if (typeof sig !== "string" || !req.rawBody)
     throw new Error("Signature or Buffer is missing/invalid")
 
-  // TODO: is it will throw error?
   const event = stripe.webhooks.constructEvent(
     req.rawBody,
     sig,
