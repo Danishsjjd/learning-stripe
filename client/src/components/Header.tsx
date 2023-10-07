@@ -1,6 +1,7 @@
-import * as React from "react"
+import MenuIcon from "@mui/icons-material/Menu"
 import AppBar from "@mui/material/AppBar"
 import Box from "@mui/material/Box"
+import Button from "@mui/material/Button"
 import CssBaseline from "@mui/material/CssBaseline"
 import Divider from "@mui/material/Divider"
 import Drawer from "@mui/material/Drawer"
@@ -9,11 +10,12 @@ import List from "@mui/material/List"
 import ListItem from "@mui/material/ListItem"
 import ListItemButton from "@mui/material/ListItemButton"
 import ListItemText from "@mui/material/ListItemText"
-import MenuIcon from "@mui/icons-material/Menu"
 import Toolbar from "@mui/material/Toolbar"
 import Typography from "@mui/material/Typography"
-import Button from "@mui/material/Button"
+import { signOut } from "firebase/auth"
+import * as React from "react"
 import { useNavigate } from "react-router-dom"
+import { auth } from "../config/firebase"
 
 interface Props {
   children: React.ReactNode
@@ -30,7 +32,6 @@ export default function Header({ children }: Props) {
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState)
   }
-
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
       <Typography variant="h6" sx={{ my: 2 }}>
@@ -48,6 +49,14 @@ export default function Header({ children }: Props) {
             </ListItemButton>
           </ListItem>
         ))}
+        <ListItem>
+          <ListItemButton
+            sx={{ textAlign: "center" }}
+            onClick={() => signOut(auth)}
+          >
+            <ListItemText primary={"Sign out"} />
+          </ListItemButton>
+        </ListItem>
       </List>
     </Box>
   )
@@ -83,6 +92,9 @@ export default function Header({ children }: Props) {
                 {item}
               </Button>
             ))}
+            <Button sx={{ color: "#fff" }} onClick={() => signOut(auth)}>
+              Sign out
+            </Button>
           </Box>
         </Toolbar>
       </AppBar>

@@ -10,6 +10,7 @@ export const env = createEnv({
     STRIPE_SECRET: z.string(),
     PORT: z.string(),
     STRIPE_WEBHOOK_SECRETS: z.string(),
+    GOOGLE_APPLICATION_CREDENTIALS: z.string(),
   },
   runtimeEnv: process.env,
 })

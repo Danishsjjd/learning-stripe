@@ -1,3 +1,5 @@
+import { auth } from "./config/firebase"
+
 const baseUrl = "http://localhost:3333/"
 
 export default async function fetchFromAPI({
@@ -10,11 +12,15 @@ export default async function fetchFromAPI({
   uri: string
   body?: Record<string, any>
 }) {
+  const user = auth.currentUser
+  const token = await user?.getIdToken()
+
   return fetch(baseUrl + uri, {
     method,
     body: JSON.stringify(body),
     headers: {
       "Content-type": "application/json",
+      Authorization: `Bearer ${token}`,
       ...(headers ? headers : {}),
     },
     ...props,
