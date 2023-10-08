@@ -4,7 +4,6 @@ import { onAuthStateChanged } from "firebase/auth"
 import { auth, fireStore } from "./config/firebase"
 import Auth from "./components/Auth"
 import { collection, doc, getDoc, setDoc } from "firebase/firestore"
-import GlobalCssOverride from "./ThemeProvider"
 
 type Store = {
   loading: boolean
@@ -12,14 +11,6 @@ type Store = {
 }
 
 export default function App() {
-  return (
-    <GlobalCssOverride>
-      <Root />
-    </GlobalCssOverride>
-  )
-}
-
-function Root() {
   const [{ foundUser, loading }, dispatch] = useReducer<
     (pre: Store, next: boolean) => Store
   >(

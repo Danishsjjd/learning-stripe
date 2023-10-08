@@ -1,11 +1,7 @@
 import React from "react"
 import ReactDOM from "react-dom/client"
 import Root from "./App.tsx"
-import "@fontsource/roboto/300.css"
-import "@fontsource/roboto/400.css"
-import "@fontsource/roboto/500.css"
-import "@fontsource/roboto/700.css"
-
+import "./index.css"
 import { loadStripe } from "@stripe/stripe-js"
 import { Elements } from "@stripe/react-stripe-js"
 

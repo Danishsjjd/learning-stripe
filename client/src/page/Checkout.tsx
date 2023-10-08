@@ -1,17 +1,14 @@
-import { ShoppingBag } from "@mui/icons-material"
-import { Button, Divider } from "@mui/material"
-import Avatar from "@mui/material/Avatar"
-import Box from "@mui/material/Box"
-import Card from "@mui/material/Card"
-import CardHeader from "@mui/material/CardHeader"
-import CardMedia from "@mui/material/CardMedia"
-import Typography from "@mui/material/Typography"
-import { red } from "@mui/material/colors"
 import { useState } from "react"
 import fetchFromAPI from "../helpers"
 import { useStripe } from "@stripe/react-stripe-js"
 
-const FOOD_AMOUNT = 5
+const product = {
+  name: "dish",
+  description: "awesome dish!",
+  images: ["https://mui.com/static/images/cards/paella.jpg"],
+  amount: 500, // $5
+  currency: "usd",
+}
 
 const Checkout = () => {
   const stripe = useStripe()
@@ -25,12 +22,12 @@ const Checkout = () => {
           {
             quantity,
             price_data: {
-              unit_amount: 500, // $5
+              unit_amount: product.amount,
               currency: "usd",
               product_data: {
-                name: "dish",
-                description: "awesome dish!",
-                images: ["https://mui.com/static/images/cards/paella.jpg"],
+                name: product.name,
+                description: product.description,
+                images: product.images,
               },
             },
           },
@@ -41,71 +38,44 @@ const Checkout = () => {
   }
 
   return (
-    <Box
-      display={"flex"}
-      justifyContent={"center"}
-      flexDirection={"column"}
-      alignItems={"center"}
-      gap={1}
-    >
-      <Typography variant={"h4"}>Stripe Checkout</Typography>
-      <Typography variant="subtitle1">
-        Stripe Amount: {FOOD_AMOUNT * quantity}
-      </Typography>
+    <>
+      <h2>Stripe Checkout</h2>
+      <p>
+        Shopping-cart scenario. Change the quantity of the products below, then
+        click checkout to open the Stripe Checkout window.
+      </p>
 
-      <CheckoutCard />
+      <div className="product">
+        <h3>{product.name}</h3>
+        <h4>Stripe Amount: {product.amount}</h4>
 
-      <Box display={"flex"} gap={3} alignItems={"center"} mt={2}>
-        <Button
-          variant="contained"
-          color="error"
+        <img src={product.images[0]} width="250px" alt="product" />
+
+        <button
+          className="btn btn-sm btn-warning"
           onClick={() => setQuantity((pre) => Math.max(0, --pre))}
-          disabled={quantity === 0}
         >
           -
-        </Button>
-        <Typography width={20} textAlign={"center"}>
-          {quantity}
-        </Typography>
-        <Button variant="contained" onClick={() => setQuantity((pre) => ++pre)}>
+        </button>
+        <span style={{ margin: "20px", fontSize: "2em" }}>{quantity}</span>
+        <button
+          className="btn btn-sm btn-success"
+          onClick={() => setQuantity((pre) => ++pre)}
+        >
           +
-        </Button>
-      </Box>
+        </button>
+      </div>
 
-      <Divider />
+      <hr />
 
-      <Button
-        endIcon={<ShoppingBag fontSize={"large"} />}
-        disabled={!quantity}
-        variant="contained"
-        color="success"
+      <button
+        className="btn btn-primary"
         onClick={onCheckout}
+        disabled={!quantity}
       >
         Start Checkout
-      </Button>
-    </Box>
-  )
-}
-
-function CheckoutCard() {
-  return (
-    <Card sx={{ maxWidth: 345, mt: 2 }}>
-      <CardHeader
-        avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            S
-          </Avatar>
-        }
-        title="dish"
-        subheader="awesome dish!"
-      />
-      <CardMedia
-        component="img"
-        height="194"
-        image="https://mui.com/static/images/cards/paella.jpg"
-        alt="Paella dish"
-      />
-    </Card>
+      </button>
+    </>
   )
 }
 

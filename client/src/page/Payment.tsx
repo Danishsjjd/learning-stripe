@@ -1,8 +1,7 @@
-import { Box, Button, Container, TextField, Typography } from "@mui/material"
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js"
-import { FormEvent, ReactNode, useState } from "react"
-import fetchFromAPI from "../helpers"
 import type { PaymentIntent, StripeCardElement } from "@stripe/stripe-js"
+import { FormEvent, useState } from "react"
+import fetchFromAPI from "../helpers"
 
 const Payment = () => {
   const stripe = useStripe()
@@ -48,97 +47,94 @@ const Payment = () => {
   }
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-      {paymentIntent && (
-        <Section>
-          <Typography variant="h2">Payment Intent</Typography>
-          <pre>ID: {paymentIntent.id}</pre>
-          <pre>Client Secret: {paymentIntent.client_secret}</pre>
-          <pre>Status: {paymentIntent.status}</pre>
-        </Section>
-      )}
-      <Section>
-        <Typography variant="body1">Step 1: Amount in cent:</Typography>
-        <form style={{ display: "flex", gap: 16 }} onSubmit={onPiSecret}>
-          <TextField
+    <>
+      <h2>Payments</h2>
+      <p>One-time payment scenario.</p>
+      <div className="well">
+        <PaymentIntentData data={paymentIntent} />
+      </div>
+
+      <div className="well">
+        <h3>Step 1: Create a Payment Intent</h3>
+        <p>
+          Change the amount of the payment in the form, then request a Payment
+          Intent to create context for one-time payment. Min 50, Max 9999999
+        </p>
+
+        <form className="form-inline" onSubmit={onPiSecret}>
+          <input
+            className="form-control"
             type="number"
-            fullWidth
-            variant="filled"
-            color="success"
             placeholder="Amount"
             value={amount}
             onChange={(e) => setAmount(Number(e.target.value))}
             disabled={!!paymentIntent}
           />
-          <Button
-            variant="contained"
-            color="success"
-            type="submit"
-            disabled={!!paymentIntent}
+          <button
+            className="btn btn-success"
+            disabled={amount <= 0}
+            hidden={!!paymentIntent}
           >
             Ready to Pay ${(amount / 100).toFixed(2)}
-          </Button>
+          </button>
         </form>
-      </Section>
-      {paymentIntent && (
-        <Section>
-          <Typography variant="body1">
-            Step 2: Submit a Payment Method
-          </Typography>
-          <Typography variant="subtitle2">
-            Collect credit card details, then submit the payment.
-          </Typography>
+      </div>
 
-          <Box
-            sx={{
-              display: "flex",
-              gap: 1,
-              alignItems: "center",
-              justifyContent: "center",
-              flexDirection: "column",
-              mt: 2,
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-              Normal Card:{" "}
-              <pre style={{ color: "darkblue" }}>4242424242424242</pre>{" "}
-            </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-              3D Secure Card:{" "}
-              <pre style={{ color: "darkblue" }}>4000002500003155</pre>
-            </div>
-          </Box>
-          <form onSubmit={handleSubmit}>
-            <CardElement />
-            <Button variant="contained" sx={{ marginTop: 1 }} type="submit">
-              Pay
-            </Button>
-          </form>
-        </Section>
-      )}
-    </Box>
+      <hr />
+
+      <form
+        onSubmit={handleSubmit}
+        className="well"
+        hidden={!paymentIntent || paymentIntent.status === "succeeded"}
+      >
+        <h3>Step 2: Submit a Payment Method</h3>
+        <p>Collect credit card details, then submit the payment.</p>
+        <p>
+          Normal Card: <code>4242424242424242</code>
+        </p>
+        <p>
+          3D Secure Card: <code>4000002500003155</code>
+        </p>
+
+        <hr />
+
+        <CardElement />
+        <button className="btn btn-success" type="submit">
+          Pay
+        </button>
+      </form>
+    </>
   )
 }
 
-const Section = ({ children }: { children: ReactNode }) => {
-  return (
-    <Container maxWidth="lg">
-      <Box
-        sx={{
-          bgcolor: "#cfe8fc",
-          padding: 2,
-          border: "1px solid grey",
-          textAlign: "center",
-          display: "flex",
-          justifyContent: "center",
-          gap: 1,
-          flexDirection: "column",
-        }}
-      >
-        {children}
-      </Box>
-    </Container>
-  )
+function PaymentIntentData(props: { data?: PaymentIntent }) {
+  if (props.data) {
+    const { id, amount, status, client_secret } = props.data
+    return (
+      <>
+        <h3>
+          Payment Intent{" "}
+          <span
+            className={
+              "badge " +
+              (status === "succeeded" ? "badge-success" : "badge-secondary")
+            }
+          >
+            {status}
+          </span>
+        </h3>
+        <pre>
+          ID: {id} <br />
+          Client Secret: {client_secret} <br />
+          Amount: {amount} <br />
+          Status:{status}
+          <br />
+        </pre>
+      </>
+    )
+  } else {
+    return <p>Payment Intent Not Created Yet</p>
+  }
 }
 
 export default Payment

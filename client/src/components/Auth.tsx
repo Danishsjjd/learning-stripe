@@ -1,5 +1,3 @@
-import { Google } from "@mui/icons-material"
-import { Box, Button } from "@mui/material"
 import { auth } from "../config/firebase"
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth"
 const Auth = () => {
@@ -10,19 +8,11 @@ const Auth = () => {
   }
 
   return (
-    <Box
-      sx={{
-        width: "100vw",
-        height: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Button startIcon={<Google />} onClick={handleGoogleAuth}>
+    <main className="vh-100 w-100 d-flex align-items-center justify-content-center">
+      <button className="btn btn-primary" onClick={handleGoogleAuth}>
         Sign with google
-      </Button>
-    </Box>
+      </button>
+    </main>
   )
 }
 
