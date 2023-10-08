@@ -19,6 +19,7 @@ export async function createSubscription(
   await stripe.paymentMethods.attach(payment_method, { customer: customer.id })
 
   // (optional: user can have default payment method) Set it as the default payment method
+  // it will create a new payment method every time so be careful to call it
   await stripe.customers.update(customer.id, {
     invoice_settings: { default_payment_method: payment_method },
   })
@@ -34,14 +35,14 @@ export async function createSubscription(
 
   // Update the user's status
   if (payment_intent.status === "succeeded") {
-    const userSnapshot = await getFirestore()
+    const userSnapshot = getFirestore()
     await userSnapshot
       .collection("users")
       .doc(userId)
       .set(
         {
           stripeCustomerId: customer.id,
-          activePlans: firestore.FieldValue.arrayUnion(plan),
+          activePlans: firestore.FieldValue.arrayUnion(subscription.id),
         },
         { merge: true }
       )
@@ -58,23 +59,23 @@ export async function cancelSubscription(
   subscriptionId: string
 ) {
   const customer = await upsertCustomer(userId)
-  if (customer.metadata.firebaseUID !== userId) {
+  if (customer.metadata.firestoreUID !== userId) {
     throw Error("Firebase UID does not match Stripe Customer")
   }
 
-  const subscription = await stripe.subscriptions.del(subscriptionId)
+  const subscription = await stripe.subscriptions.cancel(subscriptionId)
 
   // Cancel at end of period
   // const subscription = stripe.subscriptions.update(subscriptionId, { cancel_at_period_end: true });
 
   if (subscription.status === "canceled") {
-    const userSnapshot = await getFirestore()
+    const userSnapshot = getFirestore()
 
     await userSnapshot
       .collection("users")
       .doc(userId)
       .update({
-        activePlans: firestore.FieldValue.arrayRemove(subscription.plan.id),
+        activePlans: firestore.FieldValue.arrayRemove(subscription.id),
       })
   }
 

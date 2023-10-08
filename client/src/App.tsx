@@ -11,7 +11,7 @@ type Store = {
 }
 
 export default function App() {
-  const [{ foundUser, loading }, dispatch] = useReducer<
+  const [{ foundUser, loading }, setFound] = useReducer<
     (pre: Store, next: boolean) => Store
   >(
     (_, next) => {
@@ -27,7 +27,7 @@ export default function App() {
         const docRef = doc(userRef, user.uid)
         const userDoc = await getDoc(docRef)
 
-        if (userDoc.exists()) return dispatch(true)
+        if (userDoc.exists()) return setFound(true)
 
         const {
           email,
@@ -49,9 +49,9 @@ export default function App() {
           phoneNumber,
           providerId,
         })
-        dispatch(true)
+        setFound(true)
       } else {
-        dispatch(false)
+        setFound(false)
       }
     })
   }, [])

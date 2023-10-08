@@ -3,6 +3,7 @@ import Stripe from "stripe"
 import { stripe } from "."
 
 // ! this function can create multiple customers with same mail when calling it the the same time so you can cache the uid to check if it pending state of creating the stripe customer
+// ! stripe user email can be null if correct value not provided
 export async function upsertCustomer(
   userId: string,
   params?: Stripe.CustomerCreateParams

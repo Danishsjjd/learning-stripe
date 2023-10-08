@@ -1,18 +1,18 @@
 import React from "react"
 import ReactDOM from "react-dom/client"
-import Root from "./App.tsx"
+import App from "./App.tsx"
 import "./index.css"
 import { loadStripe } from "@stripe/stripe-js"
 import { Elements } from "@stripe/react-stripe-js"
 
 const stripePromise = loadStripe(
-  "pk_test_51NsVdqJpkbEUTyeTnF5xBXITj49utXfVvwFWROr1MwQKs8o6NC62aCzbMBSoVu9eH0zmowsTajQvtLoKhLdZXvAx00h2h2jRdU"
+  "pk_test_51Nz0iwCwDMOWi2D3D16hVwf9KPys9dbdAOqE5zeuQnbnN8SzzIKbo0YNuneczmnncm3HK12Y6Jc21GBjKifs4DgG00mf10jXLg"
 )
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <Elements stripe={stripePromise}>
-      <Root />
+      <App />
     </Elements>
   </React.StrictMode>
 )

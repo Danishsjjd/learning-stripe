@@ -5,7 +5,11 @@ import createStripePaymentIntent from "./payments"
 import handleStripeWebhooks from "./webhooks"
 import { getAuth } from "firebase-admin/auth"
 import { createSetupIntent, listPaymentMethods } from "./customer"
-import { createSubscription } from "./billing"
+import {
+  cancelSubscription,
+  createSubscription,
+  listSubscriptions,
+} from "./billing"
 
 const app = express()
 
@@ -40,12 +44,27 @@ app.get("/wallet", async (req, res) => {
   return res.send((await listPaymentMethods({ userId: user.uid })).data)
 })
 
-app.post("/subscriptions/", async (req: Request, res: Response) => {
+app.post("/subscriptions", async (req: Request, res: Response) => {
   const user = validateUser(req)
   const { plan, payment_method } = req.body
   const subscription = await createSubscription(user.uid, plan, payment_method)
 
   res.send(subscription)
+})
+
+// Get all subscriptions for a customer
+app.get("/subscriptions/", async (req: Request, res: Response) => {
+  const user = validateUser(req)
+
+  const subscriptions = await listSubscriptions(user.uid)
+
+  res.send(subscriptions.data)
+})
+
+// Unsubscribe or cancel a subscription
+app.patch("/subscriptions/:id", async (req: Request, res: Response) => {
+  const user = validateUser(req)
+  res.send(await cancelSubscription(user.uid, req.params.id))
 })
 
 app.post("/hooks", handleStripeWebhooks)
