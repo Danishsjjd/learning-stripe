@@ -1,12 +1,33 @@
-import { useEffect, useState } from "react"
+import { useEffect, useReducer } from "react"
 import Routes from "./router/AppRouter"
 import { onAuthStateChanged } from "firebase/auth"
 import { auth, fireStore } from "./config/firebase"
 import Auth from "./components/Auth"
 import { collection, doc, getDoc, setDoc } from "firebase/firestore"
+import GlobalCssOverride from "./ThemeProvider"
 
-export default function ButtonUsage() {
-  const [foundUser, setFoundUser] = useState(false)
+type Store = {
+  loading: boolean
+  foundUser: boolean
+}
+
+export default function App() {
+  return (
+    <GlobalCssOverride>
+      <Root />
+    </GlobalCssOverride>
+  )
+}
+
+function Root() {
+  const [{ foundUser, loading }, dispatch] = useReducer<
+    (pre: Store, next: boolean) => Store
+  >(
+    (_, next) => {
+      return { loading: false, foundUser: next }
+    },
+    { loading: true, foundUser: false }
+  )
 
   useEffect(() => {
     return onAuthStateChanged(auth, async (user) => {
@@ -15,7 +36,7 @@ export default function ButtonUsage() {
         const docRef = doc(userRef, user.uid)
         const userDoc = await getDoc(docRef)
 
-        if (userDoc.exists()) return setFoundUser(true)
+        if (userDoc.exists()) return dispatch(true)
 
         const {
           email,
@@ -37,13 +58,14 @@ export default function ButtonUsage() {
           phoneNumber,
           providerId,
         })
-        setFoundUser(true)
+        dispatch(true)
       } else {
-        setFoundUser(false)
+        dispatch(false)
       }
     })
   }, [])
 
-  if (!foundUser) return <Auth />
+  if (loading) return <>bro sit back while we are fetching your details</>
+  else if (!foundUser) return <Auth />
   else return <Routes />
 }

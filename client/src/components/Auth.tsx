@@ -1,59 +1,28 @@
-import { Button, Input } from "@mui/material"
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from "firebase/auth"
-import { ChangeEvent, useState } from "react"
+import { Google } from "@mui/icons-material"
+import { Box, Button } from "@mui/material"
 import { auth } from "../config/firebase"
-
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth"
 const Auth = () => {
-  const [credentials, setCredentials] = useState({
-    email: "",
-    password: "",
-  })
+  const handleGoogleAuth = () => {
+    const provider = new GoogleAuthProvider()
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
-    setCredentials((pre) => ({ ...pre, [e.target.id]: e.target.value }))
+    signInWithPopup(auth, provider)
+  }
 
   return (
-    <div>
-      <Input
-        placeholder="Email"
-        type="email"
-        id="email"
-        value={credentials.email}
-        onChange={handleChange}
-      />
-      <Input
-        placeholder="Password"
-        type="password"
-        id="password"
-        value={credentials.password}
-        onChange={handleChange}
-      />
-      <Button
-        onClick={() =>
-          createUserWithEmailAndPassword(
-            auth,
-            credentials.email,
-            credentials.password
-          )
-        }
-      >
-        sign up
+    <Box
+      sx={{
+        width: "100vw",
+        height: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Button startIcon={<Google />} onClick={handleGoogleAuth}>
+        Sign with google
       </Button>
-      <Button
-        onClick={() =>
-          signInWithEmailAndPassword(
-            auth,
-            credentials.email,
-            credentials.password
-          )
-        }
-      >
-        sign in
-      </Button>
-    </div>
+    </Box>
   )
 }
 

@@ -5,14 +5,6 @@ import type { PaymentMethod, SetupIntent } from "@stripe/stripe-js"
 import { Button } from "@mui/material"
 
 const Customers = () => {
-  return (
-    <>
-      <SaveCard />
-    </>
-  )
-}
-
-const SaveCard = () => {
   const [wallets, setWallets] = useState<PaymentMethod[]>([])
   const [setupIntents, setSetupIntents] = useState<SetupIntent | null>(null)
 
@@ -39,7 +31,7 @@ const SaveCard = () => {
     if (res) {
       const { error, setupIntent: setupIntentUpdated } = res
       if (error) {
-        alert(error)
+        alert(error.message)
       } else {
         setSetupIntents(setupIntentUpdated)
         await getWallet()
@@ -64,7 +56,7 @@ const SaveCard = () => {
       {setupIntents && (
         <form onSubmit={handleSubmit}>
           <CardElement />
-          <Button>Submit</Button>
+          <Button type="submit">Submit</Button>
         </form>
       )}
 

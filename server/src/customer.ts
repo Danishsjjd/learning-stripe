@@ -2,7 +2,7 @@ import { getFirestore } from "firebase-admin/firestore"
 import Stripe from "stripe"
 import { stripe } from "."
 
-// ! this function can create multiple customers when calling it the the same time so you can cache the uid to check if it pending state of creating the stripe customer
+// ! this function can create multiple customers with same mail when calling it the the same time so you can cache the uid to check if it pending state of creating the stripe customer
 export async function upsertCustomer(
   userId: string,
   params?: Stripe.CustomerCreateParams
