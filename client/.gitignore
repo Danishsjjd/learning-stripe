@@ -23,3 +23,5 @@ dist-ssr
 *.sln
 *.sw?
 styled-system
+
+.env
